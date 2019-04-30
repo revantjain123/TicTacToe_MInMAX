@@ -1,0 +1,304 @@
+<html>
+    <head>
+        <title>
+            ai
+        </title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+        <style type="text/css">
+            body
+            {
+                background-color: black;
+                
+            }
+            #again
+            {
+                margin-top:8%;
+                margin-left:47%;
+            }
+            table
+            {
+                margin-top: 5%;
+                margin-left: 37%;
+            }
+            td
+            {
+                border:6px solid white;
+                width:120px;
+                height:120px;
+                text-align: center;
+                vertical-align: middle;
+                font-size:60px;
+            }
+            table tr:first-child td
+            {
+                border-top:0px;
+                border-bottom: 0px;
+        
+            }
+            table tr:last-child td
+            {
+                  border-top:0px;
+                border-bottom: 0px;
+        
+            }
+            table td:first-child 
+            {
+    
+                border-left:0px;
+                border-right:0px;
+            }
+            table td:last-child 
+            {
+                  
+                border-left:0px;
+                border-right:0px;
+            }
+            h1
+            {
+                color:white;
+                text-align: center;
+                font-size:60px;
+                font-family: sans-serif;
+            }
+            #label1,#label2,#label3
+            {
+                font-family:sans-serif;
+                color:white;
+                position: absolute;
+                top:570px;
+            }
+            #again
+            {
+                 font-family:sans-serif;
+                color:white;
+                position: absolute;
+                top:460px;
+                margin-left: 85%;
+            }
+            #label1
+            {
+                margin-left: 10%;
+            }
+            #label2
+            {
+                margin-left:60%;
+            }
+            #label3
+            {
+                margin-left: 38.5%;
+            }
+            p
+            {
+                color:white;
+                cursor:pointer;
+                font-size:25px;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <h1>Tic-tac-toe</h1>
+        <table>
+            <tr>
+                <td id="0" onclick="tictac(this)"></td>
+                <td id="1" onclick="tictac(this)"></td>
+                <td id="2" onclick="tictac(this)"></td>
+            </tr>
+            <tr>
+                <td id="3" onclick="tictac(this)"></td>
+                <td id="4" onclick="tictac(this)"></td>
+                <td id="5" onclick="tictac(this)"></td>
+            </tr>
+            <tr>
+                <td id="6" onclick="tictac(this)"></td>
+                <td id="7" onclick="tictac(this)"></td>
+                <td id="8" onclick="tictac(this)"></td>
+            </tr>
+        </table>
+            
+            <audio id="audio" src="https://www.soundjay.com/button/sounds/beep-02.mp3"></audio>
+            <audio id="audio1" src="https://www.soundjay.com/button/sounds/beep-07.mp3"></audio> 
+            
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            var board=[0,1,2,3,4,5,6,7,8];
+            var huplayer="x";
+            var aiplayer="0";1
+            
+           
+            function tictac(ele)
+            {   
+                var audio = document.getElementById("audio");
+                audio.play();
+                turn(ele.id,huplayer);
+                if(checkTie()!=0)
+                {
+                    turn(bestspot(),aiplayer);
+                 
+                }
+                else
+                {   
+                    reset();
+                
+                }
+            }
+            function turn(id,player)
+            {
+                    board[id]=player;
+                    document.getElementById(id).innerHTML=player;
+                    document.getElementById(id).style.color="white";
+                    var gamewon=winner(board,player);
+                    if(gamewon.win=="true") gameover(gamewon);
+            }
+            function bestspot()
+            {
+                return minmax(board,aiplayer).index;
+            }
+            function winner(board,player)
+            {
+                var gamewon={};
+                if(board[0]==player&&board[1]==player&&board[2]==player)
+                {
+                    gamewon={x:"0",y:"1",z:"2",win:"true"};
+                    return gamewon;
+                }
+                if(board[3]==player&&board[4]==player&&board[5]==player)
+                {
+                    gamewon={x:"3",y:"4",z:"5",win:"true"};
+                     return gamewon;
+                }       
+                if(board[6]==player&&board[7]==player&&board[8]==player)
+                {
+                    gamewon={x:"6",y:"7",z:"8",win:"true"};
+                    return gamewon;
+                }      
+                 
+                if(board[0]==player&&board[3]==player&&board[6]==player)
+                {
+                    gamewon={x:"0",y:"3",z:"6",win:"true"};
+                    return gamewon;
+                }
+                if(board[1]==player&&board[4]==player&&board[7]==player)
+                {
+                    gamewon={x:"1",y:"4",z:"7",win:"true"};
+                    return gamewon;
+                }
+                if(board[2]==player&&board[5]==player&&board[8]==player)     
+                {
+                    gamewon={x:"2",y:"5",z:"8",win:"true"};
+                    return gamewon;
+                }
+                if(board[0]==player&&board[4]==player&&board[8]==player)
+                {
+                   gamewon={x:"0",y:"4",z:"8",win:"true"};
+                    return gamewon;
+                }   
+                if(board[2]==player&&board[4]==player&&board[6]==player)
+                {
+                    gamewon={x:"2",y:"4",z:"6",win:"true"};
+                    return gamewon;
+                }
+                else
+                    return gamewon.win="false";
+            }
+            function emptySquares()
+            {
+                return board.filter(s=>typeof(s)=="number");
+            }
+            function minmax(a,player)
+            {
+                var available=emptySquares(a);
+                if(winner(a,huplayer).win=="true")
+                    return {score:-10};
+                else if(winner(a,aiplayer).win=="true")
+                    return {score:20};
+                else if(available.length==0)
+                    return {score:0};
+                    
+                var moves=[];
+                for(i=0;i<available.length;i++)
+                {
+                    var move={};
+                    move.index=a[available[i]];
+                    a[available[i]]=player;
+                        if(player==aiplayer)
+                        {
+                            var result=minmax(a,huplayer);
+                            move.score=result.score;
+                        }
+                            else
+                            {   var result= minmax(a,aiplayer);
+                                move.score=result.score;
+                            }
+                            a[available[i]]=move.index;
+                            moves.push(move);
+                        }
+                    var bestspot;
+                    if(player==aiplayer)
+                        {
+                            var bestscore=-1000000;
+                            for(var i=0;i<moves.length;i++)
+                                {
+                                    if(moves[i].score>bestscore)
+                                        {
+                                            bestscore=moves[i].score;
+                                            bestspot=i;
+                                        }
+                                }
+                        }
+                    else
+                        {
+                            var bestscore=1000000;
+                            for(var i=0;i<moves.length;i++)
+                                {
+                                    if(bestscore>moves[i].score)
+                                        {
+                                            bestscore=moves[i].score;
+                                            bestspot=i;
+                                        }
+                                }
+                        }
+                return moves[bestspot];
+                }
+                function gameover(gamewon)
+                {   
+                    
+                    document.getElementById(gamewon.x).style.backgroundColor="orange";
+                    document.getElementById(gamewon.y).style.backgroundColor="orange";
+                    document.getElementById(gamewon.z).style.backgroundColor="orange";
+                    disable();
+                }
+                function disable()
+                {
+                    var i=document.getElementsByTagName("td");
+                    for(var x=0;x<i.length;x++)
+                        {
+                            i[x].onclick="null";
+                        }
+                }
+                function checkTie()
+                {
+                    var a=emptySquares(board);
+                     return a.length;
+                }
+                function reset()
+                {
+                   
+                    var i=document.getElementsByTagName("td");
+                    for(var x=0;x<i.length;x++)
+                        {
+                            i[x].style.backgroundColor="grey";
+                        }
+                    disable();
+                }
+                
+            
+        </script>
+    </body>
+</html>
